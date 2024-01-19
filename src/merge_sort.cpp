@@ -14,7 +14,11 @@ void MergeSort::merge_sort(int array[], int l, int r) {
             std::async(std::launch::async, [&] { merge_sort(array, l, m); });
         
         merge_sort(array, m + 1, r);
-        left_future.get();
+        try {
+            left_future.get();
+        } catch (const std::exception &ex) {
+            std::cerr << "Error: " << ex.what() << std::endl;
+        }
         merge(array, l, m, r);
     } else {
         merge_sort(array, l, m);
